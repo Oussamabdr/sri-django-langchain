@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Résultat de l'Agent IA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+        }
+        .recommendation {
+            border: 2px solid #28a745;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            background-color: #e9ffe9;
+        }
+        .hitl-manual {
+            border-color: #ffc107;
+            background-color: #fffbe6;
+        }
+        .product-id {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .status {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .status-auto {
+            background-color: #28a745;
+            color: white;
+        }
+        .status-manual {
+            background-color: #ffc107;
+            color: #333;
+        }
+        p {
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Résultat de l'Analyse pour {{ result.client_name }}</h1>
+
+<div class="recommendation {% if result.hitl_status == 'À VALIDER MANUELLEMENT' %}hitl-manual{% endif %}">
+    <h2>Recommandation de l'Agent</h2>
+
+    <p><strong>ID Produit Suggéré :</strong>
+        <span class="product-id">{{ result.product_id }}</span>
+    </p>
+
+    <p><strong>Justification :</strong> {{ result.justification_courte }}</p>
+
+    <p><strong>Score de Confiance IA :</strong>
+        {{ result.score_confiance|floatformat:2 }}
+    </p>
+
+    <div class="status {% if result.hitl_status == 'À VALIDER MANUELLEMENT' %}status-manual{% else %}status-auto{% endif %}">
+        Statut du Workflow (HITL) : {{ result.hitl_status }}
+    </div>
+
+    {% if result.hitl_status == 'À VALIDER MANUELLEMENT' %}
+    <p style="color: #c09853; margin-top: 15px;">
+        ⚠️ ACTION REQUISE : Ce score est faible. Un expert doit valider la recommandation.
+    </p>
+    {% endif %}
+</div>
+
+<p style="text-align: center; margin-top: 30px;">
+    <a href="{% url 'recommendation-form' %}">← Nouvelle Analyse</a>
+</p>
+
+</body>
+</html>
