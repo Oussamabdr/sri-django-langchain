@@ -1,87 +1,129 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Agent de Recommandation IA</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 40px auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-        }
-        h1 {
-            text-align: center;
-            color: #007bff;
-        }
-        label {
-            display: block;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-        input[type="text"],
-        input[type="number"],
-        textarea,
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #28a745;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 20px;
-            width: 100%;
-            font-size: 1.1em;
-        }
-        .error {
-            color: red;
-            text-align: center;
-            margin-bottom: 15px;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Agent IA – Recommandation</title>
+
+<style>
+body {
+    background: #f4f6f9;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.container {
+    max-width: 600px;
+    background: white;
+    margin: 60px auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+}
+
+label {
+    font-weight: bold;
+    margin-top: 15px;
+    display: block;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+button {
+    margin-top: 20px;
+    width: 100%;
+    background: #3498db;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #2980b9;
+}
+
+.alert {
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.alert-error {
+    background: #ffe6e6;
+    color: #c0392b;
+}
+
+.alert-info {
+    background: #e8f4fd;
+    color: #2980b9;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 15px;
+}
+</style>
 </head>
+
 <body>
 
-<h1>Soumettre un Profil Client</h1>
+<div class="container">
+    <h1>🤖 Agent de Recommandation IA</h1>
 
-{% if error %}
-<p class="error">{{ error }}</p>
-{% endif %}
+    {% if error %}
+    <div class="alert alert-error">
+        {{ error }}
+        {% if detail %}
+        <div style="font-size:12px;">{{ detail }}</div>
+        {% endif %}
+    </div>
+    {% endif %}
 
-<form method="POST">
-    {% csrf_token %}
+    <div class="alert alert-info">
+        Remplissez le formulaire pour obtenir une recommandation intelligente.
+    </div>
 
-    <label for="name">Nom du Client / Entreprise :</label>
-    <input type="text" id="name" name="name" required>
+    <form method="POST">
+        {% csrf_token %}
 
-    <label for="age">Âge du Client (années d'existence) :</label>
-    <input type="number" id="age" name="age" min="1" required>
+        <label>Nom du client</label>
+        <input type="text" name="name" required>
 
-    <label for="sector">Secteur d'Activité :</label>
-    <select id="sector" name="sector" required>
-        <option value="Finance">Finance / Banque</option>
-        <option value="Industrie">Industrie / Fabrication</option>
-        <option value="Technologie">Technologie / IT</option>
-        <option value="E-commerce">E-commerce / Retail</option>
-        <option value="Santé">Santé / Pharma</option>
-        <option value="Autre">Autre</option>
-    </select>
+        <label>Âge (années)</label>
+        <input type="number" name="age" min="1" required>
 
-    <label for="need_description">Besoin Exprimé :</label>
-    <textarea id="need_description" name="need_description" rows="4" required></textarea>
+        <label>Secteur</label>
+        <select name="sector" required>
+            <option>Finance</option>
+            <option>Technologie</option>
+            <option>Industrie</option>
+            <option>Santé</option>
+            <option>E-commerce</option>
+            <option>Autre</option>
+        </select>
 
-    <button type="submit">Analyser et Recommander</button>
-</form>
+        <label>Besoin</label>
+        <textarea name="need_description" rows="4" required></textarea>
+
+        <button>🚀 Analyser</button>
+    </form>
+
+    <div class="footer">
+        <a href="{% url 'history' %}">📜 Voir l’historique</a>
+    </div>
+</div>
 
 </body>
 </html>

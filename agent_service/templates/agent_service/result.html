@@ -1,88 +1,80 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Résultat de l'Agent IA</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            background-color: #f9f9f9;
-        }
-        h1 {
-            text-align: center;
-            color: #007bff;
-        }
-        .recommendation {
-            border: 2px solid #28a745;
-            padding: 20px;
-            margin-top: 20px;
-            border-radius: 8px;
-            background-color: #e9ffe9;
-        }
-        .hitl-manual {
-            border-color: #ffc107;
-            background-color: #fffbe6;
-        }
-        .product-id {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #007bff;
-        }
-        .status {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-        .status-auto {
-            background-color: #28a745;
-            color: white;
-        }
-        .status-manual {
-            background-color: #ffc107;
-            color: #333;
-        }
-        p {
-            margin: 8px 0;
-        }
-    </style>
+<title>Résultat</title>
+
+<style>
+body {
+    background: #f4f6f9;
+    font-family: 'Segoe UI', Arial;
+}
+
+.card {
+    max-width: 700px;
+    background: white;
+    margin: 60px auto;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.success {
+    border-left: 6px solid #2ecc71;
+}
+
+.warning {
+    border-left: 6px solid #f1c40f;
+}
+
+h1 {
+    text-align: center;
+}
+
+.badge {
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 14px;
+}
+
+.badge-success {
+    background: #2ecc71;
+    color: white;
+}
+
+.badge-warning {
+    background: #f1c40f;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 16px;
+    background: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+}
+</style>
 </head>
+
 <body>
 
-<h1>Résultat de l'Analyse pour {{ result.client_name }}</h1>
+<div class="card {% if result.hitl_status == 'À VALIDER MANUELLEMENT' %}warning{% else %}success{% endif %}">
+<h1>Résultat pour {{ result.client_name }}</h1>
 
-<div class="recommendation {% if result.hitl_status == 'À VALIDER MANUELLEMENT' %}hitl-manual{% endif %}">
-    <h2>Recommandation de l'Agent</h2>
+<p><strong>Produit recommandé :</strong> {{ result.product_id }}</p>
+<p><strong>Justification :</strong> {{ result.justification_courte }}</p>
+<p><strong>Score :</strong> {{ result.score_confiance|floatformat:2 }}</p>
 
-    <p><strong>ID Produit Suggéré :</strong>
-        <span class="product-id">{{ result.product_id }}</span>
-    </p>
+{% if result.hitl_status == 'À VALIDER MANUELLEMENT' %}
+<span class="badge badge-warning">⚠ Validation humaine requise</span>
+{% else %}
+<span class="badge badge-success">✔ Validation automatique</span>
+{% endif %}
 
-    <p><strong>Justification :</strong> {{ result.justification_courte }}</p>
-
-    <p><strong>Score de Confiance IA :</strong>
-        {{ result.score_confiance|floatformat:2 }}
-    </p>
-
-    <div class="status {% if result.hitl_status == 'À VALIDER MANUELLEMENT' %}status-manual{% else %}status-auto{% endif %}">
-        Statut du Workflow (HITL) : {{ result.hitl_status }}
-    </div>
-
-    {% if result.hitl_status == 'À VALIDER MANUELLEMENT' %}
-    <p style="color: #c09853; margin-top: 15px;">
-        ⚠️ ACTION REQUISE : Ce score est faible. Un expert doit valider la recommandation.
-    </p>
-    {% endif %}
+<br><br>
+<a class="btn" href="{% url 'recommendation-form' %}">Nouvelle analyse</a>
+<a class="btn" href="{% url 'history' %}">Historique</a>
 </div>
-
-<p style="text-align: center; margin-top: 30px;">
-    <a href="{% url 'recommendation-form' %}">← Nouvelle Analyse</a>
-</p>
 
 </body>
 </html>
